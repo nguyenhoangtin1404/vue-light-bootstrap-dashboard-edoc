@@ -19,6 +19,8 @@ import App from "./App.vue";
 
 // LightBootstrap plugin
 import LightBootstrap from "./light-bootstrap-main";
+// Import Vule Select
+//import "vue-select/dist/vue-select.css";
 
 // router setup
 import routes from "./routes/routes";

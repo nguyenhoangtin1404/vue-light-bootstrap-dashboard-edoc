@@ -1,6 +1,6 @@
 <template>
   <ul class="nav nav-mobile-menu">
-    <base-dropdown>
+    <!-- <base-dropdown>
       <template slot="title">
         <i class="fa fa-globe"></i>
         <b class="caret"></b>
@@ -25,7 +25,7 @@
       <a class="dropdown-item" href="#">Something else here</a>
       <div class="divider"></div>
       <a class="dropdown-item" href="#">Separated link</a>
-    </base-dropdown>
+    </base-dropdown> -->
 
     <li class="nav-item">
       <a class="nav-link" href="#pablo">
@@ -35,9 +35,8 @@
   </ul>
 </template>
 <script>
-  export default {
-    name: 'mobile-menu'
-  }
+export default {
+  name: "mobile-menu",
+};
 </script>
-<style>
-</style>
+<style></style>
