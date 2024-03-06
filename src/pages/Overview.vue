@@ -9,24 +9,37 @@
                 <div class="col-md-2">
                   <label for="unitSelect">Đơn vị:</label>
                   <v-select
-                    :options="[
-                      { unitId: '0', unitName: 'Tất cả' },
-                      ...unitList,
-                    ]"
+                    :options="unitList"
                     v-model="selectedUnit"
                     label="unitName"
                     placeholder="Tìm kiếm đơn vị"
                   ></v-select>
                 </div>
                 <div class="col-md-2">
-                  <label for="unitSelect">Ngày:</label>
+                  <label for="fromDate">Từ ngày:</label></br>
                   <template>
-                    <!--  <VueDatePicker v-model="date" week-picker /> -->
+                    <date-pick
+                      v-model="fromDate"
+                      :format="'DD/MM/YYYY'"
+                      :inputAttributes="{ readonly: true }"
+                      id="fromDate"
+                    ></date-pick>
                   </template>
                 </div>
                 <div class="col-md-2">
-                  <button class="btn btn-primary mt-4 mt-md-0">
-                    Xem dữ liệu
+                  <label for="toDate">Đến ngày:</label></br>
+                  <template>
+                    <date-pick
+                      v-model="toDate"
+                      :format="'DD/MM/YYYY'"
+                      :inputAttributes="{ readonly: true }"
+                      id="toDate"
+                    ></date-pick>
+                  </template>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-primary mt-4 mt-md-0" @click="fetchSummary">
+                    Xem
                   </button>
                 </div>
               </div>
@@ -42,7 +55,7 @@
             </div>
             <div slot="content">
               <p class="card-category">Tổng số văn bản gửi - nhận</p>
-              <h4 class="card-title">145455 Văn bản</h4>
+              <h4 class="card-title">{{ send + received }} Văn bản</h4>
             </div>
             <div slot="footer"><i class="fa fa-refresh"></i>Updated now</div>
           </stats-card>
@@ -55,7 +68,7 @@
             </div>
             <div slot="content">
               <p class="card-category">Tổng số văn bản gửi</p>
-              <h4 class="card-title">45454 Văn bản</h4>
+              <h4 class="card-title">{{ send  }} Văn bản</h4>
             </div>
             <div slot="footer"><i class="fa fa-calendar-o"></i>Last day</div>
           </stats-card>
@@ -68,7 +81,7 @@
             </div>
             <div slot="content">
               <p class="card-category">Tổng số văn bản nhận</p>
-              <h4 class="card-title">4353454 Văn bản</h4>
+              <h4 class="card-title">{{ received }} Văn bản</h4>
             </div>
             <div slot="footer"><i class="fa fa-clock-o"></i>Last day</div>
           </stats-card>
@@ -81,7 +94,7 @@
             </div>
             <div slot="content">
               <p class="card-category">Số lượng đơn vị</p>
-              <h4 class="card-title">1663</h4>
+              <h4 class="card-title">{{ countUnit  }} Đơn vị</h4>
             </div>
             <div slot="footer"><i class="fa fa-refresh"></i>Updated now</div>
           </stats-card>
@@ -119,23 +132,33 @@
 import ChartCard from "src/components/Cards/ChartCard.vue";
 import StatsCard from "src/components/Cards/StatsCard.vue";
 import LTable from "src/components/Table.vue";
-//import VueDatePicker from "@vuepic/vue-datepicker";
 import axios from "axios";
+// Import Vule Datepicker
+import DatePick from "vue-date-pick";
+import "vue-date-pick/dist/vueDatePick.css";
+// Import Vule Select
 import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
 export default {
   components: {
     LTable,
     ChartCard,
     StatsCard,
-    // VueDatePicker,
+    DatePick,
     vSelect,
   },
   data() {
+    const currentDate = new Date();
     return {
-      selectedUnit: "Tất cả", // Chọn mặc định giá trị "Tất cả"
+      fromDate: currentDate.toLocaleDateString("en-GB"),
+    toDate: currentDate.toLocaleDateString("en-GB"),
+      selectedUnit: "", 
+      unitName : '0',
       unitList: [],
-      date: null,
+      send:0,
+      received:0,
+      countUnit:0,
       lineChart: {
         data: {
           labels: [
@@ -186,10 +209,6 @@ export default {
     };
   },
   methods: {
-    fetchData() {
-      // Viết logic để gọi API FilterByDate với các tham số cần thiết
-      console.log("Gọi API với các tham số:", this.selectedUnit);
-    },
     async fetchUnits() {
       try {
         const response = await axios.get(
@@ -199,6 +218,47 @@ export default {
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu đơn vị:", error);
       }
+    },
+    async fetchSummary() {
+        try {
+          const requestData = {
+            startDate: this.fromDate,
+            endDate: this.toDate,
+            unitName: this.selectedUnit ? this.selectedUnit.unitName : this.unitName,
+          };
+
+          const response = await axios.post(
+            "https://localhost:44315/api/Edocs/SummaryByDate",
+            requestData
+          );
+
+          // Xử lý dữ liệu trả về tại đây
+          if (response && response.data) {
+            this.send = response.data[0].send;
+            this.received = response.data[0].received;
+            this.countUnit = response.data[0].countUnit;
+          }
+        } catch (error) {
+          console.error("Lỗi khi gọi API:", error);
+        }
+      },
+    async fetchData() {
+          try {
+            const requestData = {
+              startDate: this.fromDate,
+              endDate: this.toDate,
+              unitName: this.selectedUnit? this.selectedUnit.unitName : this.unitName,
+            };
+
+            const response = await axios.post(
+              "https://localhost:44315/api/Edocs/FilterByDate",
+              requestData
+            );
+
+            // Xử lý dữ liệu trả về tại đây
+          } catch (error) {
+            console.error("Lỗi khi gọi API:", error);
+          }
     },
   },
   mounted() {
