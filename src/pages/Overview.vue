@@ -6,7 +6,7 @@
           <div class="card">
             <div class="card-body">
               <div class="row align-items-center">
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <label for="unitSelect">Đơn vị:</label>
                   <v-select
                     :options="unitList"
@@ -15,7 +15,7 @@
                     placeholder="Tìm kiếm đơn vị"
                   ></v-select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <label for="fromDate">Từ ngày:</label></br>
                   <template>
                     <date-pick
@@ -26,7 +26,7 @@
                     ></date-pick>
                   </template>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                   <label for="toDate">Đến ngày:</label></br>
                   <template>
                     <date-pick
@@ -37,8 +37,8 @@
                     ></date-pick>
                   </template>
                 </div>
-                <div class="col-md-2">
-                  <button class="btn btn-primary mt-4 mt-md-0" @click="fetchSummary">
+                <div class="col-md-3">
+                  <button class="btn btn-primary " @click="fetchData()">
                     Xem
                   </button>
                 </div>
@@ -101,15 +101,15 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
+        <!-- <div class="col-md-12">
           <chart-card
             :chart-data="lineChart.data"
             :chart-options="lineChart.options"
             :responsive-options="lineChart.responsiveOptions"
           >
             <template slot="header">
-              <h4 class="card-title">Users Behavior</h4>
-              <p class="card-category">24 Hours performance</p>
+              <h4 class="card-title">Tình hỉnh gửi nhận văn bản </h4>
+              <p class="card-category">Từ ngày {{ fromDate }} 00:00 đến ngày {{ toDate }} 23:59 </p>
             </template>
             <template slot="footer">
               <div class="legend">
@@ -123,6 +123,20 @@
               </div>
             </template>
           </chart-card>
+        </div> -->
+
+        <div class="col-md-12"> 
+        <card class="strpied-tabled-with-hover"  body-classes="table-full-width table-responsive">
+            <template slot="header">
+              <h4 class="card-title">Tình hình gửi nhận văn bản </h4>
+              <p class="card-category">Từ ngày {{ fromDate }} 00:00 đến ngày {{ toDate }} 23:59 </p>
+            </template>
+            <template>
+              <div class="col-md-12" >
+                <vue-table-dynamic :params="params"></vue-table-dynamic>
+              </div>
+            </template>
+          </card>
         </div>
       </div>
     </div>
@@ -131,7 +145,7 @@
 <script>
 import ChartCard from "src/components/Cards/ChartCard.vue";
 import StatsCard from "src/components/Cards/StatsCard.vue";
-import LTable from "src/components/Table.vue";
+
 import axios from "axios";
 // Import Vule Datepicker
 import DatePick from "vue-date-pick";
@@ -139,76 +153,84 @@ import "vue-date-pick/dist/vueDatePick.css";
 // Import Vule Select
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+// Import Datatable
+import VueTableDynamic from 'vue-table-dynamic'
 
 export default {
   components: {
-    LTable,
     ChartCard,
     StatsCard,
     DatePick,
     vSelect,
+    VueTableDynamic
   },
   data() {
     const currentDate = new Date();
+    
     return {
+      params: {
+        data: [],
+        header: 'row',
+        border: true,
+        stripe: true,
+        enableSearch: true,
+        pagination: true,
+        pageSize: 10,
+        pageSizes: [5, 10, 20, 50,100],
+        sort: [0, 1],
+        wordWrap: 'break-word',
+        rowHeight: 35,
+         columnWidth: [{column: 0, width: '5%'}, {column: 1, width: '55%'}, {column: 2, width: '20%'}, {column: 3, width: '20%'}],
+      },
       fromDate: currentDate.toLocaleDateString("en-GB"),
-    toDate: currentDate.toLocaleDateString("en-GB"),
-      selectedUnit: "", 
+      toDate: currentDate.toLocaleDateString("en-GB"),
+      selectedUnit: '', 
       unitName : '0',
       unitList: [],
       send:0,
       received:0,
       countUnit:0,
-      lineChart: {
-        data: {
-          labels: [
-            "9:00AM",
-            "12:00AM",
-            "3:00PM",
-            "6:00PM",
-            "9:00PM",
-            "12:00PM",
-            "3:00AM",
-            "6:00AM",
-          ],
-          series: [
-            [287, 385, 490, 492, 554, 586, 698, 695],
-            [67, 152, 143, 240, 287, 335, 435, 437],
-            [23, 113, 67, 108, 190, 239, 307, 308],
-          ],
-        },
-        options: {
-          low: 0,
-          high: 800,
-          showArea: false,
-          height: "245px",
-          axisX: {
-            showGrid: false,
-          },
-          lineSmooth: true,
-          showLine: true,
-          showPoint: true,
-          fullWidth: true,
-          chartPadding: {
-            right: 50,
-          },
-        },
-        responsiveOptions: [
-          [
-            "screen and (max-width: 1300px)",
-            {
-              axisX: {
-                labelInterpolationFnc(value) {
-                  return value[0];
-                },
-              },
-            },
-          ],
-        ],
-      },
+      // lineChart: {
+      //   data: {
+      //     labels: [],
+      //     series: [],
+      //   },
+      //   options: {
+      //     low: 0,
+      //     high: 800,
+      //     showArea: false,
+      //     height: "245px",
+      //     axisX: {
+      //       showGrid: false,
+      //     },
+      //     lineSmooth: true,
+      //     showLine: true,
+      //     showPoint: true,
+      //     fullWidth: true,
+      //     chartPadding: {
+      //       right: 50,
+      //     },
+      //   },
+      //   responsiveOptions: [
+      //     [
+      //       "screen and (max-width: 1300px)",
+      //       {
+      //         axisX: {
+      //           labelInterpolationFnc(value) {
+      //             return value[0];
+      //           },
+      //         },
+      //       },
+      //     ],
+      //   ],
+      // },
     };
   },
   methods: {
+    async fetchData() {
+      this.fetchSummary();
+      this.fetchDataDetail();
+    },
     async fetchUnits() {
       try {
         const response = await axios.get(
@@ -231,9 +253,9 @@ export default {
             "https://localhost:44315/api/Edocs/SummaryByDate",
             requestData
           );
-
           // Xử lý dữ liệu trả về tại đây
           if (response && response.data) {
+         
             this.send = response.data[0].send;
             this.received = response.data[0].received;
             this.countUnit = response.data[0].countUnit;
@@ -242,24 +264,33 @@ export default {
           console.error("Lỗi khi gọi API:", error);
         }
       },
-    async fetchData() {
-          try {
-            const requestData = {
-              startDate: this.fromDate,
-              endDate: this.toDate,
-              unitName: this.selectedUnit? this.selectedUnit.unitName : this.unitName,
-            };
+      async fetchDataDetail() {
+            try {
+              const requestData = {
+                startDate: this.fromDate,
+                endDate: this.toDate,
+                unitName: this.selectedUnit ? this.selectedUnit.unitName : this.unitName,
+              };
 
-            const response = await axios.post(
-              "https://localhost:44315/api/Edocs/FilterByDate",
-              requestData
-            );
-
-            // Xử lý dữ liệu trả về tại đây
-          } catch (error) {
-            console.error("Lỗi khi gọi API:", error);
-          }
-    },
+              const response = await axios.post(
+                "https://localhost:44315/api/Edocs/DetailDataByDate",
+                requestData
+              );
+              const newData = [['STT','Tên đơn vị', 'Gửi', 'Nhận']];
+                 // Xử lý dữ liệu trả về tại đây
+              if (response && response.data) {
+                response.data.forEach((item, index) => {
+                  newData.push([index + 1, item.unitName, item.totalSend, item.totalRece]);
+                  //console.log(item);
+                });
+                this.params.data = newData;
+                // Log the updated data for debugging
+                //console.log(this.params.data);
+              }
+            } catch (error) {
+              console.error("Lỗi khi gọi API:", error);
+            }
+          },
   },
   mounted() {
     // Gọi hàm fetchUnits khi component được mount
