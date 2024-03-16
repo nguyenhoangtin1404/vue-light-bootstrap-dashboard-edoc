@@ -8,12 +8,15 @@
               <div class="row align-items-center">
                 <div class="col-md-3">
                   <label for="unitSelect">Đơn vị:</label>
-                  <v-select
+                  <!-- <v-select
                     :options="unitList"
                     v-model="selectedUnit"
                     label="unitName"
                     placeholder="Tìm kiếm đơn vị"
-                  ></v-select>
+                  ></v-select> -->
+
+    <treeselect v-model="value" :multiple="true" :options="options" />
+ 
                 </div>
                 <div class="col-md-3">
                   <label for="fromDate">Từ ngày:</label></br>
@@ -155,6 +158,10 @@ import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 // Import Datatable
 import VueTableDynamic from 'vue-table-dynamic'
+  // import the component
+  import Treeselect from '@riophae/vue-treeselect'
+  // import the styles
+  import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {
   components: {
@@ -162,12 +169,46 @@ export default {
     StatsCard,
     DatePick,
     vSelect,
-    VueTableDynamic
+    VueTableDynamic,
+    Treeselect 
   },
   data() {
     const currentDate = new Date();
     
     return {
+      value: null,
+        // define options
+        options: [ {
+          id: 'a',
+          label: 'a',
+          children: [ {
+            id: 'aa',
+            label: 'aa',
+            children: [ {
+            id: 'aaa',
+            label: 'aaa',
+            children: [ {
+            id: 'aaaa',
+            label: 'aaaa',
+          }, {
+            id: 'abbb',
+            label: 'abbb',
+          } ],
+          }, {
+            id: 'abb',
+            label: 'abb',
+          } ],
+          }, {
+            id: 'ab',
+            label: 'ab',
+          } ],
+        }, {
+          id: 'b',
+          label: 'b',
+        }, {
+          id: 'c',
+          label: 'c',
+        } ],
       params: {
         data: [],
         header: 'row',
