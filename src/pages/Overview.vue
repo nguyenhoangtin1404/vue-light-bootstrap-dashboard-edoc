@@ -178,37 +178,51 @@ export default {
     return {
       value: null,
         // define options
-        options: [ {
-          id: 'a',
-          label: 'a',
-          children: [ {
-            id: 'aa',
-            label: 'aa',
-            children: [ {
-            id: 'aaa',
-            label: 'aaa',
-            children: [ {
-            id: 'aaaa',
-            label: 'aaaa',
-          }, {
-            id: 'abbb',
-            label: 'abbb',
-          } ],
-          }, {
-            id: 'abb',
-            label: 'abb',
-          } ],
-          }, {
-            id: 'ab',
-            label: 'ab',
-          } ],
-        }, {
-          id: 'b',
-          label: 'b',
-        }, {
-          id: 'c',
-          label: 'c',
-        } ],
+        options: [
+  {
+    "id": "1621",
+    "label": "Tỉnh Phú yên",
+    "children": [
+      {
+        "id": "402",
+        "label": "Văn phòng Đoàn đại biểu Quốc hội và Hội đồng nhân dân tỉnh",
+        "children": null
+      },
+      {
+        "id": "1406",
+        "label": "UBND tỉnh Phú Yên",
+        "children": [
+          {
+            "id": "1",
+            "label": "UBND TP Tuy Hòa",
+            "children": null
+          },
+          {
+            "id": "63",
+            "label": "UBND Huyện Sông Hinh - Tỉnh Phú Yên",
+            "children": [
+              {
+                "id": "65",
+                "label": "Hội Nông Dân - huyện Sông Hinh",
+                "children": null
+              }
+            ]
+          },
+          {
+            "id": "3",
+            "label": "Sở Kế hoạch và Đầu tư",
+            "children": null
+          }
+        ]
+      },
+      {
+        "id": "209",
+        "label": "Tỉnh ủy Phú Yên",
+        "children": null
+      }
+    ]
+  }
+],
       params: {
         data: [],
         header: 'row',
