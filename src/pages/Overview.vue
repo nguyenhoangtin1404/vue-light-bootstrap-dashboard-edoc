@@ -14,12 +14,16 @@
                     label="unitName"
                     placeholder="Tìm kiếm đơn vị"
                   ></v-select> -->
-
-    <treeselect v-model="value" :multiple="true" :options="options" />
- 
+                  <!-- {{ value }} -->
+                  <treeselect
+                    v-model="value"
+                    :multiple="false"
+                    :options="options"
+                    placeholder="Chọn đơn vị"
+                  />
                 </div>
                 <div class="col-md-3">
-                  <label for="fromDate">Từ ngày:</label></br>
+                  <p><label for="fromDate">Từ ngày:</label></p>
                   <template>
                     <date-pick
                       v-model="fromDate"
@@ -30,7 +34,7 @@
                   </template>
                 </div>
                 <div class="col-md-3">
-                  <label for="toDate">Đến ngày:</label></br>
+                  <p><label for="toDate">Đến ngày:</label></p>
                   <template>
                     <date-pick
                       v-model="toDate"
@@ -41,7 +45,7 @@
                   </template>
                 </div>
                 <div class="col-md-3">
-                  <button class="btn btn-primary " @click="fetchData()">
+                  <button class="btn btn-primary" @click="fetchData()">
                     Xem
                   </button>
                 </div>
@@ -71,7 +75,7 @@
             </div>
             <div slot="content">
               <p class="card-category">Tổng số văn bản gửi</p>
-              <h4 class="card-title">{{ send  }} Văn bản</h4>
+              <h4 class="card-title">{{ send }} Văn bản</h4>
             </div>
             <div slot="footer"><i class="fa fa-calendar-o"></i>Last day</div>
           </stats-card>
@@ -97,7 +101,7 @@
             </div>
             <div slot="content">
               <p class="card-category">Số lượng đơn vị</p>
-              <h4 class="card-title">{{ countUnit  }} Đơn vị</h4>
+              <h4 class="card-title">{{ countUnit }} Đơn vị</h4>
             </div>
             <div slot="footer"><i class="fa fa-refresh"></i>Updated now</div>
           </stats-card>
@@ -128,14 +132,19 @@
           </chart-card>
         </div> -->
 
-        <div class="col-md-12"> 
-        <card class="strpied-tabled-with-hover"  body-classes="table-full-width table-responsive">
+        <div class="col-md-12">
+          <card
+            class="strpied-tabled-with-hover"
+            body-classes="table-full-width table-responsive"
+          >
             <template slot="header">
-              <h4 class="card-title">Tình hình gửi nhận văn bản </h4>
-              <p class="card-category">Từ ngày {{ fromDate }} 00:00 đến ngày {{ toDate }} 23:59 </p>
+              <h4 class="card-title">Tình hình gửi nhận văn bản</h4>
+              <p class="card-category">
+                Từ ngày {{ fromDate }} 00:00 đến ngày {{ toDate }} 23:59
+              </p>
             </template>
             <template>
-              <div class="col-md-12" >
+              <div class="col-md-12">
                 <vue-table-dynamic :params="params"></vue-table-dynamic>
               </div>
             </template>
@@ -157,11 +166,11 @@ import "vue-date-pick/dist/vueDatePick.css";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
 // Import Datatable
-import VueTableDynamic from 'vue-table-dynamic'
-  // import the component
-  import Treeselect from '@riophae/vue-treeselect'
-  // import the styles
-  import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import VueTableDynamic from "vue-table-dynamic";
+// import the component
+import Treeselect from "@riophae/vue-treeselect";
+// import the styles
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   components: {
@@ -170,81 +179,41 @@ export default {
     DatePick,
     vSelect,
     VueTableDynamic,
-    Treeselect 
+    Treeselect,
   },
   data() {
     const currentDate = new Date();
-    
+
     return {
       value: null,
-        // define options
-        options: [
-  {
-    "id": "1621",
-    "label": "Tỉnh Phú yên",
-    "children": [
-      {
-        "id": "402",
-        "label": "Văn phòng Đoàn đại biểu Quốc hội và Hội đồng nhân dân tỉnh",
-        "children": null
-      },
-      {
-        "id": "1406",
-        "label": "UBND tỉnh Phú Yên",
-        "children": [
-          {
-            "id": "1",
-            "label": "UBND TP Tuy Hòa",
-            "children": null
-          },
-          {
-            "id": "63",
-            "label": "UBND Huyện Sông Hinh - Tỉnh Phú Yên",
-            "children": [
-              {
-                "id": "65",
-                "label": "Hội Nông Dân - huyện Sông Hinh",
-                "children": null
-              }
-            ]
-          },
-          {
-            "id": "3",
-            "label": "Sở Kế hoạch và Đầu tư",
-            "children": null
-          }
-        ]
-      },
-      {
-        "id": "209",
-        "label": "Tỉnh ủy Phú Yên",
-        "children": null
-      }
-    ]
-  }
-],
+      options: [],
       params: {
         data: [],
-        header: 'row',
+        header: "row",
         border: true,
         stripe: true,
         enableSearch: true,
         pagination: true,
         pageSize: 10,
-        pageSizes: [5, 10, 20, 50,100],
+        pageSizes: [5, 10, 20, 50, 100],
         sort: [0, 1],
-        wordWrap: 'break-word',
+        wordWrap: "break-word",
         rowHeight: 35,
-         columnWidth: [{column: 0, width: '5%'}, {column: 1, width: '55%'}, {column: 2, width: '20%'}, {column: 3, width: '20%'}],
+        columnWidth: [
+          { column: 0, width: "5%" },
+          { column: 1, width: "55%" },
+          { column: 2, width: "20%" },
+          { column: 3, width: "20%" },
+        ],
       },
       fromDate: currentDate.toLocaleDateString("en-GB"),
       toDate: currentDate.toLocaleDateString("en-GB"),
-      selectedUnit: '', 
-      unitName : '0',
+      selectedUnit: "",
+      unitName: "0",
       unitList: [],
-      send:0,
-      received:0,
-      countUnit:0,
+      send: 0,
+      received: 0,
+      countUnit: 0,
       // lineChart: {
       //   data: {
       //     labels: [],
@@ -289,63 +258,89 @@ export default {
     async fetchUnits() {
       try {
         const response = await axios.get(
-          "https://localhost:44315/api/edocs/GetUnits"
+          "https://localhost:44315/api/edocs/GetUnitsTree"
         );
-        this.unitList = response.data;
+        // Loại bỏ các đối tượng có thuộc tính "children" là null
+        const filteredData = this.filterChildrenNull(response.data);
+        this.options = filteredData;
       } catch (error) {
         console.error("Lỗi khi lấy dữ liệu đơn vị:", error);
       }
     },
-    async fetchSummary() {
-        try {
-          const requestData = {
-            startDate: this.fromDate,
-            endDate: this.toDate,
-            unitName: this.selectedUnit ? this.selectedUnit.unitName : this.unitName,
-          };
 
-          const response = await axios.post(
-            "https://localhost:44315/api/Edocs/SummaryByDate",
-            requestData
-          );
-          // Xử lý dữ liệu trả về tại đây
-          if (response && response.data) {
-         
-            this.send = response.data[0].send;
-            this.received = response.data[0].received;
-            this.countUnit = response.data[0].countUnit;
+    filterChildrenNull(data) {
+      // Kiểm tra nếu dữ liệu là một mảng
+      if (Array.isArray(data)) {
+        // Lọc các phần tử trong mảng
+        return data.map((item) => {
+          // Nếu thuộc tính "children" là null, loại bỏ nó
+          if (item.children === null) {
+            delete item.children;
+          } else {
+            // Nếu thuộc tính "children" không phải là null, tiếp tục lọc các phần tử con
+            item.children = this.filterChildrenNull(item.children);
           }
-        } catch (error) {
-          console.error("Lỗi khi gọi API:", error);
-        }
-      },
-      async fetchDataDetail() {
-            try {
-              const requestData = {
-                startDate: this.fromDate,
-                endDate: this.toDate,
-                unitName: this.selectedUnit ? this.selectedUnit.unitName : this.unitName,
-              };
+          return item;
+        });
+      } else {
+        // Nếu dữ liệu không phải là mảng, trả về dữ liệu nguyên thủy
+        return data;
+      }
+    },
+    async fetchSummary() {
+      try {
+        const requestData = {
+          startDate: this.fromDate,
+          endDate: this.toDate,
+          unitId: this.value,
+        };
 
-              const response = await axios.post(
-                "https://localhost:44315/api/Edocs/DetailDataByDate",
-                requestData
-              );
-              const newData = [['STT','Tên đơn vị', 'Gửi', 'Nhận']];
-                 // Xử lý dữ liệu trả về tại đây
-              if (response && response.data) {
-                response.data.forEach((item, index) => {
-                  newData.push([index + 1, item.unitName, item.totalSend, item.totalRece]);
-                  //console.log(item);
-                });
-                this.params.data = newData;
-                // Log the updated data for debugging
-                //console.log(this.params.data);
-              }
-            } catch (error) {
-              console.error("Lỗi khi gọi API:", error);
-            }
-          },
+        const response = await axios.post(
+          "https://localhost:44315/api/Edocs/SummaryByDate",
+          requestData
+        );
+        // Xử lý dữ liệu trả về tại đây
+        if (response && response.data) {
+          this.send = response.data[0].send;
+          this.received = response.data[0].received;
+          this.countUnit = response.data[0].countUnit;
+        }
+      } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+      }
+    },
+    async fetchDataDetail() {
+      try {
+        const requestData = {
+          startDate: this.fromDate,
+          endDate: this.toDate,
+          unitId: this.value,
+        };
+
+        const response = await axios.post(
+          "https://localhost:44315/api/Edocs/DetailDataByDate",
+          requestData
+        );
+        const newData = [["STT", "Tên đơn vị", "Gửi", "Nhận"]];
+        // Xử lý dữ liệu trả về tại đây
+        if (response && response.data) {
+          response.data.forEach((item, index) => {
+            newData.push([
+              index + 1,
+              item.unitName,
+              item.totalSend,
+              item.totalRece,
+            ]);
+            //console.log(item);
+          });
+          this.params.data = newData;
+          // Log the updated data for debugging
+          //console.log(this.params.data);
+        }
+      } catch (error) {
+        console.error("Lỗi khi gọi API:", error);
+      }
+    },
   },
   mounted() {
     // Gọi hàm fetchUnits khi component được mount
